@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { downloadPDF } from '../utils/pdfExport';
 import LoadingSpinner from './LoadingSpinner';
 import TestChart from './TestChart';
+import { mockInsightsData, mockPredictionsData, mockBusinessInsights } from '../data/mockData';
 import {
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   Bar, PieChart, Pie, Cell, AreaChart, Area, ComposedChart, Legend, Line
@@ -20,7 +21,6 @@ const AdvancedDashboard = () => {
   const [insightsData, setInsightsData] = useState(null);
   const [predictionsData, setPredictionsData] = useState(null);
   const [businessInsights, setBusinessInsights] = useState(null);
-  const [notifications, setNotifications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   // Load data from JSON files
@@ -36,27 +36,23 @@ const AdvancedDashboard = () => {
         );
         
         const dataPromise = Promise.all([
-          fetch('/analysis_insights.json'),
-          fetch('/prediction_results.json'),
-          fetch('/business_insights.json')
+          Promise.resolve(mockInsightsData), // Mock insights data
+          Promise.resolve(mockPredictionsData), // Mock predictions data
+          Promise.resolve(mockBusinessInsights) // Mock business insights
         ]);
 
-        const [insightsResponse, predictionsResponse, businessResponse] = await Promise.race([
+        const [insightsData, predictionsData, businessInsightsData] = await Promise.race([
           dataPromise,
           timeoutPromise
         ]);
 
         console.log('📡 Responses received:', {
-          insights: insightsResponse.status,
-          predictions: predictionsResponse.status,
-          business: businessResponse.status
+          insights: 'Mocked',
+          predictions: 'Mocked',
+          business: 'Mocked'
         });
 
-        if (insightsResponse.ok && predictionsResponse.ok && businessResponse.ok) {
-          const insightsData = await insightsResponse.json();
-          const predictionsData = await predictionsResponse.json();
-          const businessInsightsData = await businessResponse.json();
-          
+        if (insightsData && predictionsData && businessInsightsData) {
           console.log('✅ Data loaded successfully:', {
             insights: insightsData,
             predictions: predictionsData,
@@ -68,9 +64,9 @@ const AdvancedDashboard = () => {
           setBusinessInsights(businessInsightsData);
         } else {
           console.error('❌ Failed to load data:', {
-            insights: insightsResponse.status,
-            predictions: predictionsResponse.status,
-            business: businessResponse.status
+            insights: 'Mocked',
+            predictions: 'Mocked',
+            business: 'Mocked'
           });
           throw new Error('Failed to load data files');
         }
@@ -619,33 +615,6 @@ const AdvancedDashboard = () => {
           </div>
         </motion.div>
 
-        {/* Notifications Panel */}
-        <AnimatePresence>
-          {notifications.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -50 }}
-              className="fixed bottom-4 right-4 w-80 bg-white rounded-lg shadow-lg border border-gray-200 p-4 z-50"
-            >
-              <h4 className="font-semibold text-gray-900 mb-2">Recent Updates</h4>
-              <div className="space-y-2">
-                {notifications.slice(0, 3).map((notification) => (
-                  <div key={notification.id} className="flex items-start space-x-2">
-                    <div className={`w-2 h-2 rounded-full mt-2 ${
-                      notification.type === 'success' ? 'bg-green-500' :
-                      notification.type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500'
-                    }`}></div>
-                    <div className="flex-1">
-                      <p className="text-sm text-gray-700">{notification.message}</p>
-                      <p className="text-xs text-gray-500">{notification.time}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
     </div>
   );
