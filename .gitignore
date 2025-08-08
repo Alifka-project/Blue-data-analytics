@@ -56,7 +56,7 @@ jspm_packages/
 # Yarn Integrity file
 .yarn-integrity
 
-# Python
+# Python - EXCLUDE FROM VERCEL DEPLOYMENT
 __pycache__/
 *.py[cod]
 *$py.class
@@ -74,16 +74,26 @@ venv.bak/
 # pyenv
 .python-version
 
+# Python files - EXCLUDE FROM VERCEL DEPLOYMENT
+*.py
+requirements.txt
+requirements_simple.txt
+*.xlsx
+*.png
+*.json
+!package.json
+!package-lock.json
+!tailwind.config.js
+!vercel.json
+
+# Shell scripts
+*.sh
+
 # Data files
 *.xlsx
 *.csv
 *.json
-data/
-
-# Cache
-.cache/
-.parcel-cache/
-
-# Temporary files
-tmp/
-temp/
+!package.json
+!package-lock.json
+!tailwind.config.js
+!vercel.json
