@@ -23,18 +23,38 @@ const AdvancedDashboard = () => {
   const [businessInsights, setBusinessInsights] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load data from JSON files - SIMPLIFIED FOR VERCEL
+  // Load data from JSON files - RESTORED WITH MOCK DATA
   useEffect(() => {
-    console.log('🔄 Starting data loading...');
-    
-    // Immediately set mock data without async operations
-    setInsightsData(mockInsightsData);
-    setPredictionsData(mockPredictionsData);
-    setBusinessInsights(mockBusinessInsights);
-    
-    console.log('✅ Mock data loaded successfully');
-    setIsLoading(false);
-    console.log('🏁 Data loading completed');
+    const loadData = async () => {
+      try {
+        setIsLoading(true);
+        console.log('🔄 Starting data loading...');
+        
+        // Use mock data with a small delay to simulate loading
+        setTimeout(() => {
+          setInsightsData(mockInsightsData);
+          setPredictionsData(mockPredictionsData);
+          setBusinessInsights(mockBusinessInsights);
+          
+          console.log('✅ Mock data loaded successfully');
+          setIsLoading(false);
+          console.log('🏁 Data loading completed');
+        }, 500);
+        
+      } catch (error) {
+        console.error('❌ Error loading data:', error);
+        // Use fallback data
+        setInsightsData({
+          service_performance: { total_services: 29945, total_gallons_collected: 1671702 },
+          customer_behavior: { total_customers: 3314, high_value_customers: 593 }
+        });
+        setPredictionsData({});
+        setBusinessInsights({});
+        setIsLoading(false);
+      }
+    };
+
+    loadData();
   }, []);
 
   // Calculate summary metrics from REAL data
@@ -157,13 +177,16 @@ const AdvancedDashboard = () => {
     },
   ];
 
-  // Generate real chart data from insights with filters - FIXED
-  const chartData = (() => {
-    console.log('Generating chart data...');
-    console.log('insightsData temporal:', insightsData?.temporal_analysis);
-    
-    // Always return fallback data to ensure chart displays
-    const fallbackData = [
+  // Generate real chart data from insights with filters - RESTORED WITH FALLBACK
+  const chartData = insightsData?.temporal_analysis?.monthly_pattern ? 
+    insightsData.temporal_analysis.monthly_pattern.map(item => ({
+      name: item.month.substring(0, 3),
+      gallons: Math.round(item.gallons / 1000),
+      services: Math.round(item.services / 10),
+      efficiency: item.efficiency
+    }))
+    .slice(-12) // Last 12 months
+    : [
       { name: 'Jan', gallons: 500, services: 300, efficiency: 72 },
       { name: 'Feb', gallons: 450, services: 280, efficiency: 72 },
       { name: 'Mar', gallons: 480, services: 290, efficiency: 72 },
@@ -177,34 +200,50 @@ const AdvancedDashboard = () => {
       { name: 'Nov', gallons: 580, services: 340, efficiency: 76 },
       { name: 'Dec', gallons: 570, services: 335, efficiency: 75 }
     ];
-    
-    console.log('Using fallback chart data:', fallbackData);
-    return fallbackData;
-  })();
 
-  // Enhanced pie data with real customer segments - FIXED
-  const pieData = (() => {
-    console.log('Generating pie data...');
-    console.log('insightsData customer behavior:', insightsData?.customer_behavior);
-    
-    // Always return fallback data to ensure chart displays
-    const fallbackData = [
-      { name: 'High Value', value: 18, color: '#10B981', customers: 593, revenue: 299130 },
-      { name: 'Medium Value', value: 33, color: '#3B82F6', customers: 1088, revenue: 548825 },
-      { name: 'Low Value', value: 49, color: '#F59E0B', customers: 1633, revenue: 823745 }
-    ];
-    
-    console.log('Using fallback pie data:', fallbackData);
-    return fallbackData;
-  })();
+  // Enhanced pie data with real customer segments - RESTORED WITH FALLBACK
+  const pieData = insightsData?.customer_behavior ? [
+    { 
+      name: 'High Value', 
+      value: Math.round((insightsData.customer_behavior.high_value_customers / insightsData.customer_behavior.total_customers) * 100), 
+      color: '#10B981',
+      customers: insightsData.customer_behavior.high_value_customers,
+      revenue: insightsData.customer_behavior.avg_customer_value_gallons * insightsData.customer_behavior.high_value_customers
+    },
+    { 
+      name: 'Medium Value', 
+      value: Math.round(((insightsData.customer_behavior.total_customers - insightsData.customer_behavior.high_value_customers) * 0.4 / insightsData.customer_behavior.total_customers) * 100), 
+      color: '#3B82F6',
+      customers: Math.round((insightsData.customer_behavior.total_customers - insightsData.customer_behavior.high_value_customers) * 0.4),
+      revenue: insightsData.customer_behavior.avg_customer_value_gallons * Math.round((insightsData.customer_behavior.total_customers - insightsData.customer_behavior.high_value_customers) * 0.4)
+    },
+    { 
+      name: 'Low Value', 
+      value: Math.round(((insightsData.customer_behavior.total_customers - insightsData.customer_behavior.high_value_customers) * 0.6 / insightsData.customer_behavior.total_customers) * 100), 
+      color: '#F59E0B',
+      customers: Math.round((insightsData.customer_behavior.total_customers - insightsData.customer_behavior.high_value_customers) * 0.6),
+      revenue: insightsData.customer_behavior.avg_customer_value_gallons * Math.round((insightsData.customer_behavior.total_customers - insightsData.customer_behavior.high_value_customers) * 0.6)
+    }
+  ] : [
+    { name: 'High Value', value: 18, color: '#10B981', customers: 593, revenue: 299130 },
+    { name: 'Medium Value', value: 33, color: '#3B82F6', customers: 1088, revenue: 548825 },
+    { name: 'Low Value', value: 49, color: '#F59E0B', customers: 1633, revenue: 823745 }
+  ];
 
-  // Regional performance data - SIMPLIFIED TO ALWAYS WORK
-  const regionalData = (() => {
-    console.log('Generating regional data...');
-    console.log('insightsData:', insightsData);
-    
-    // Always return fallback data to ensure chart displays
-    const fallbackData = [
+  // Regional performance data - RESTORED WITH REAL DATA
+  const regionalData = insightsData?.geographic_analysis?.area_breakdown ? 
+    Object.entries(insightsData.geographic_analysis.area_breakdown)
+      .filter(([area, data]) => data.Total_Gallons > 0)
+      .map(([area, data]) => ({
+        region: area,
+        gallons: Math.round(data.Total_Gallons / 1000), // Convert to thousands
+        customers: data.Unique_Customers || 0,
+        services: data.Service_Count || 0,
+        growth: Math.round(((data.Total_Gallons || 0) / (insightsData.service_performance?.total_gallons_collected || 1)) * 100)
+      }))
+      .sort((a, b) => b.gallons - a.gallons)
+      .slice(0, 10)
+    : [
       { region: 'Al Quoz', gallons: 451, customers: 150, services: 500, growth: 15 },
       { region: 'Al Barsha', gallons: 300, customers: 120, services: 400, growth: 12 },
       { region: 'Al Karama', gallons: 225, customers: 90, services: 300, growth: 8 },
@@ -216,10 +255,6 @@ const AdvancedDashboard = () => {
       { region: 'Al Hudaiba', gallons: 70, customers: 30, services: 100, growth: 2 },
       { region: 'Al Jumeirah', gallons: 60, customers: 25, services: 80, growth: 1 }
     ];
-    
-    console.log('Using fallback data:', fallbackData);
-    return fallbackData;
-  })();
 
   // Performance metrics
   const performanceMetrics = [
