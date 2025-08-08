@@ -18,7 +18,6 @@
       "dest": "/index.html"
     }
   ],
-  "functions": {},
   "env": {
     "NODE_ENV": "production"
   }
