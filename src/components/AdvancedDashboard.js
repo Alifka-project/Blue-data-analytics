@@ -303,18 +303,30 @@ const AdvancedDashboard = () => {
   ];
 
   // Regional performance data - ALWAYS SHOW DATA
-  const regionalData = [
-    { region: 'Al Quoz', gallons: 451, customers: 150, services: 500, growth: 15 },
-    { region: 'Al Barsha', gallons: 300, customers: 120, services: 400, growth: 12 },
-    { region: 'Al Karama', gallons: 225, customers: 90, services: 300, growth: 8 },
-    { region: 'Al Garhoud', gallons: 180, customers: 75, services: 250, growth: 6 },
-    { region: 'Al Qudra', gallons: 150, customers: 60, services: 200, growth: 5 },
-    { region: 'Al Maktoum', gallons: 120, customers: 50, services: 180, growth: 4 },
-    { region: 'Al Wasl', gallons: 100, customers: 40, services: 150, growth: 3 },
-    { region: 'Al Safa', gallons: 80, customers: 35, services: 120, growth: 2 },
-    { region: 'Al Hudaiba', gallons: 70, customers: 30, services: 100, growth: 2 },
-    { region: 'Al Satwa', gallons: 60, customers: 25, services: 80, growth: 1 }
-  ];
+  const regionalData = insightsData?.geographic_analysis?.area_breakdown ? 
+    Object.entries(insightsData.geographic_analysis.area_breakdown)
+      .filter(([area, data]) => data.Total_Gallons > 0)
+      .map(([area, data]) => ({
+        region: area,
+        gallons: Math.round(data.Total_Gallons / 1000), // Convert to thousands
+        customers: data.Unique_Customers || 0,
+        services: data.Service_Count || 0,
+        growth: Math.round(((data.Total_Gallons || 0) / (insightsData.service_performance?.total_gallons_collected || 1)) * 100)
+      }))
+      .sort((a, b) => b.gallons - a.gallons)
+      .slice(0, 10)
+    : [
+      { region: 'Al Quoz', gallons: 451, customers: 150, services: 500, growth: 15 },
+      { region: 'Al Barsha', gallons: 300, customers: 120, services: 400, growth: 12 },
+      { region: 'Al Karama', gallons: 225, customers: 90, services: 300, growth: 8 },
+      { region: 'Al Garhoud', gallons: 180, customers: 75, services: 250, growth: 6 },
+      { region: 'Al Qudra', gallons: 150, customers: 60, services: 200, growth: 5 },
+      { region: 'Al Maktoum', gallons: 120, customers: 50, services: 180, growth: 4 },
+      { region: 'Al Wasl', gallons: 100, customers: 40, services: 150, growth: 3 },
+      { region: 'Al Safa', gallons: 80, customers: 35, services: 120, growth: 2 },
+      { region: 'Al Hudaiba', gallons: 70, customers: 30, services: 100, growth: 2 },
+      { region: 'Al Jumeirah', gallons: 60, customers: 25, services: 80, growth: 1 }
+    ];
 
   // Performance metrics
   const performanceMetrics = [
