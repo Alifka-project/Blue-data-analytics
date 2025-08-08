@@ -1,0 +1,17 @@
+# Minimal requirements for Blue Data Analytics
+# Compatible with Python 3.12
+
+# Core dependencies
+pandas
+numpy
+matplotlib
+seaborn
+scikit-learn
+
+# Optional but recommended
+plotly
+openpyxl
+
+# Build tools
+setuptools
+wheel
