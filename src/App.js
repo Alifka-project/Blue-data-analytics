@@ -6,6 +6,7 @@ import { HelmetProvider } from 'react-helmet-async';
 
 // Components
 import Layout from './components/Layout';
+import ErrorBoundary from './components/ErrorBoundary';
 
 import AdvancedDashboard from './components/AdvancedDashboard';
 import Insights from './pages/Insights';
@@ -28,46 +29,48 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
-    <HelmetProvider>
-      <QueryClientProvider client={queryClient}>
-        <Router>
-          <div className="App">
-            <Layout>
-              <Routes>
-                <Route path="/" element={<AdvancedDashboard />} />
-                <Route path="/insights" element={<Insights />} />
-                <Route path="/predictions" element={<Predictions />} />
-                <Route path="/ai-chatbot" element={<AIChatbot />} />
-              </Routes>
-            </Layout>
-            <Toaster
-              position="top-right"
-              toastOptions={{
-                duration: 4000,
-                style: {
-                  background: '#363636',
-                  color: '#fff',
-                },
-                success: {
-                  duration: 3000,
-                  iconTheme: {
-                    primary: '#4ade80',
-                    secondary: '#fff',
+    <ErrorBoundary>
+      <HelmetProvider>
+        <QueryClientProvider client={queryClient}>
+          <Router>
+            <div className="App">
+              <Layout>
+                <Routes>
+                  <Route path="/" element={<AdvancedDashboard />} />
+                  <Route path="/insights" element={<Insights />} />
+                  <Route path="/predictions" element={<Predictions />} />
+                  <Route path="/ai-chatbot" element={<AIChatbot />} />
+                </Routes>
+              </Layout>
+              <Toaster
+                position="top-right"
+                toastOptions={{
+                  duration: 4000,
+                  style: {
+                    background: '#363636',
+                    color: '#fff',
                   },
-                },
-                error: {
-                  duration: 5000,
-                  iconTheme: {
-                    primary: '#ef4444',
-                    secondary: '#fff',
+                  success: {
+                    duration: 3000,
+                    iconTheme: {
+                      primary: '#4ade80',
+                      secondary: '#fff',
+                    },
                   },
-                },
-              }}
-            />
-          </div>
-        </Router>
-      </QueryClientProvider>
-    </HelmetProvider>
+                  error: {
+                    duration: 5000,
+                    iconTheme: {
+                      primary: '#ef4444',
+                      secondary: '#fff',
+                    },
+                  },
+                }}
+              />
+            </div>
+          </Router>
+        </QueryClientProvider>
+      </HelmetProvider>
+    </ErrorBoundary>
   );
 }
 
