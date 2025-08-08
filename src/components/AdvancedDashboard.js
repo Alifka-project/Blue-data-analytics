@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { downloadPDF } from '../utils/pdfExport';
+import LoadingSpinner from './LoadingSpinner';
 import {
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   Bar, PieChart, Pie, Cell, AreaChart, Area, ComposedChart, Legend, Line
@@ -331,7 +332,7 @@ const AdvancedDashboard = () => {
           animate={{ opacity: 1, scale: 1 }}
           className="text-center"
         >
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+          <LoadingSpinner />
           <p className="mt-4 text-lg text-gray-600">Loading Enterprise Dashboard...</p>
         </motion.div>
       </div>
