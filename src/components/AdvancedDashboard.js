@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { downloadPDF } from '../utils/pdfExport';
 import LoadingSpinner from './LoadingSpinner';
+import TestChart from './TestChart';
 import {
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   Bar, PieChart, Pie, Cell, AreaChart, Area, ComposedChart, Legend, Line
@@ -515,6 +516,15 @@ const AdvancedDashboard = () => {
             </ResponsiveContainer>
           </motion.div>
         </div>
+
+        {/* Test Chart - TEMPORARY */}
+        <motion.div
+          variants={cardVariants}
+          whileHover="hover"
+          className="rounded-xl bg-white p-8 shadow-lg border border-gray-100 mb-8"
+        >
+          <TestChart />
+        </motion.div>
 
         {/* Regional Performance Analysis - FIXED DATA */}
         <motion.div
