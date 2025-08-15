@@ -1,0 +1,11 @@
+{
+  "period": "2025-08",
+  "run_id": "run-2025-08-15T01:11:35.431055",
+  "model_version": "missed-v1.2.0",
+  "grease_collected_tons": 1671.702,
+  "forecast_tons": 1755.2871,
+  "missed_cleanings": 19985,
+  "revenue_change_pct": -3.90375854214123,
+  "illegal_dump_alerts": 3997,
+  "co2_saved_kg": 16717020
+}

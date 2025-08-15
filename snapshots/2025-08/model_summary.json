@@ -1,0 +1,23 @@
+{
+  "period": "2025-08",
+  "run_id": "run-2025-08-15T01:11:35.585540",
+  "model_version": "missed-v1.2.0",
+  "models": {
+    "missed_cleaning": {
+      "accuracy": 1.0,
+      "feature_importance": {
+        "Gallons": 0.00023971306783411047,
+        "Traps": 0.0,
+        "Days_Since": 0.9997602869321659
+      }
+    },
+    "volume_prediction": {
+      "accuracy": 0.9999746612751197,
+      "feature_importance": {
+        "Gallons": 0.9999527809248021,
+        "Traps": 0.0,
+        "Days_Since": 4.721907519784279e-05
+      }
+    }
+  }
+}
