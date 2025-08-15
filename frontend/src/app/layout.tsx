@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
 
@@ -63,6 +63,23 @@ export const metadata: Metadata = {
   verification: {
     google: "your-google-verification-code",
   },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon.svg", type: "image/svg+xml" }
+    ],
+    apple: "/logo.svg",
+    shortcut: "/favicon.ico"
+  },
+  manifest: "/manifest.webmanifest",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: "#1e3a8a",
 };
 
 export default function RootLayout({
@@ -72,14 +89,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${montserrat.variable}`}>
-      <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/logo.svg" />
-        <link rel="manifest" href="/manifest.webmanifest" />
-        <meta name="theme-color" content="#1e3a8a" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </head>
       <body className={`${inter.className} antialiased`}>
         {children}
       </body>

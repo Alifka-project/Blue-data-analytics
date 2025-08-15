@@ -230,22 +230,22 @@ What would you like to know?`,
 
   return (
     <MainLayout>
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-2">
             AI Assistant & Explainability
           </h1>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-base sm:text-lg">
             Natural language queries, auto-rendering charts, and business insights
           </p>
         </div>
 
         {/* Chat Interface */}
-        <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 xl:grid-cols-4 gap-4 sm:gap-6">
           {/* Chat Messages */}
-          <div className="xl:col-span-3">
-            <Card className="flex flex-col" style={{ height: 'calc(100vh - 300px)', minHeight: '500px' }}>
+          <div className="xl:col-span-3 order-2 xl:order-1">
+            <Card className="flex flex-col" style={{ height: 'calc(100vh - 300px)', minHeight: '400px' }}>
               <CardHeader className="flex-shrink-0">
                 <CardTitle className="flex items-center gap-2">
                   <Bot className="h-5 w-5" />
@@ -257,7 +257,7 @@ What would you like to know?`,
               </CardHeader>
               <CardContent className="flex-1 flex flex-col overflow-hidden p-0">
                 {/* Messages Area */}
-                <div className="flex-1 overflow-hidden p-6 pb-4">
+                <div className="flex-1 overflow-hidden p-4 sm:p-6 pb-4">
                   <ScrollArea className="h-full w-full" ref={scrollAreaRef}>
                     <div className="space-y-4 pr-4 pb-4">
                     {messages.map((message) => (
@@ -274,7 +274,7 @@ What would you like to know?`,
                         )}
                         
                         <div
-                          className={`max-w-[85%] rounded-lg p-4 ${
+                          className={`max-w-[85%] rounded-lg p-3 sm:p-4 ${
                             message.role === "user"
                               ? "bg-blue-600 text-white"
                               : "bg-muted/50 border"
@@ -313,7 +313,7 @@ What would you like to know?`,
                 </div>
 
                 {/* Input Area */}
-                <div className="flex-shrink-0 border-t p-6 pt-4">
+                <div className="flex-shrink-0 border-t p-4 sm:p-6 pt-4">
                   <div className="flex gap-2">
                     <Input
                       value={inputValue}
@@ -338,8 +338,8 @@ What would you like to know?`,
           </div>
 
           {/* Quick Actions & Examples */}
-          <div className="xl:col-span-1">
-            <div className="space-y-4 sticky top-4">
+          <div className="xl:col-span-1 order-1 xl:order-2">
+            <div className="space-y-4 xl:sticky xl:top-4">
             {/* Quick Actions */}
             <Card>
               <CardHeader>
@@ -355,7 +355,8 @@ What would you like to know?`,
                   onClick={() => setInputValue("Show me the current KPI overview")}
                 >
                   <BarChart3 className="h-4 w-4 mr-2" />
-                  KPI Overview
+                  <span className="hidden sm:inline">KPI Overview</span>
+                  <span className="sm:hidden">KPI</span>
                 </Button>
                 <Button
                   variant="outline"
@@ -363,7 +364,8 @@ What would you like to know?`,
                   onClick={() => setInputValue("Analyze portfolio performance")}
                 >
                   <TrendingUp className="h-4 w-4 mr-2" />
-                  Portfolio Analysis
+                  <span className="hidden sm:inline">Portfolio Analysis</span>
+                  <span className="sm:hidden">Portfolio</span>
                 </Button>
                 <Button
                   variant="outline"
@@ -371,7 +373,8 @@ What would you like to know?`,
                   onClick={() => setInputValue("Show geographic insights")}
                 >
                   <MapPin className="h-4 w-4 mr-2" />
-                  Geographic Insights
+                  <span className="hidden sm:inline">Geographic Insights</span>
+                  <span className="sm:hidden">Geography</span>
                 </Button>
                 <Button
                   variant="outline"
@@ -379,7 +382,8 @@ What would you like to know?`,
                   onClick={() => setInputValue("Assess current risks")}
                 >
                   <AlertTriangle className="h-4 w-4 mr-2" />
-                  Risk Assessment
+                  <span className="hidden sm:inline">Risk Assessment</span>
+                  <span className="sm:hidden">Risks</span>
                 </Button>
               </CardContent>
             </Card>
@@ -413,15 +417,15 @@ What would you like to know?`,
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <Badge variant="secondary">KPI Analysis</Badge>
                     <Badge variant="secondary">Portfolio Insights</Badge>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <Badge variant="secondary">Risk Assessment</Badge>
                     <Badge variant="secondary">Trend Analysis</Badge>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <Badge variant="secondary">Geographic Data</Badge>
                     <Badge variant="secondary">Performance Metrics</Badge>
                   </div>

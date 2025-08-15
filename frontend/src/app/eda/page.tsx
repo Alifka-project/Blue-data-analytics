@@ -205,26 +205,26 @@ export default function EDAPage() {
 
   return (
     <MainLayout period={edaData.period}>
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-2">
             Data Exploration & Analysis
           </h1>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-base sm:text-lg">
 
           </p>
         </div>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Records</CardTitle>
               <BarChart3 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{edaData.total_records.toLocaleString()}</div>
+              <div className="text-xl sm:text-2xl font-bold">{edaData.total_records.toLocaleString()}</div>
               <p className="text-xs text-muted-foreground">data points analyzed</p>
             </CardContent>
           </Card>
@@ -235,7 +235,7 @@ export default function EDAPage() {
               <MapPin className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{edaData.total_outlets.toLocaleString()}</div>
+              <div className="text-xl sm:text-2xl font-bold">{edaData.total_outlets.toLocaleString()}</div>
               <p className="text-xs text-muted-foreground">service locations</p>
             </CardContent>
           </Card>
@@ -246,7 +246,7 @@ export default function EDAPage() {
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{Object.keys(edaData.areas).length}</div>
+              <div className="text-xl sm:text-2xl font-bold">{Object.keys(edaData.areas).length}</div>
               <p className="text-xs text-muted-foreground">geographic zones</p>
             </CardContent>
           </Card>
@@ -257,7 +257,7 @@ export default function EDAPage() {
               <MapPin className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600">
+              <div className="text-xl sm:text-2xl font-bold text-green-600">
                 {portfolioData.filter(item => item.lat && item.lon).length.toLocaleString()}
               </div>
               <p className="text-xs text-muted-foreground">
@@ -279,7 +279,7 @@ export default function EDAPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <Select value={filters.area} onValueChange={(value) => setFilters(prev => ({ ...prev, area: value }))}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select Area" />
@@ -316,7 +316,7 @@ export default function EDAPage() {
                 </SelectContent>
               </Select>
 
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col sm:flex-row items-center gap-2">
                 <Button 
                   variant="outline" 
                   onClick={() => setFilters({ area: 'all', category: 'all', grade: 'all' })}
@@ -333,17 +333,17 @@ export default function EDAPage() {
         </Card>
 
         {/* Main Analysis Tabs */}
-        <Tabs defaultValue="distributions" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="distributions">Distributions</TabsTrigger>
-            <TabsTrigger value="correlations">Correlations</TabsTrigger>
-            <TabsTrigger value="spatial">Spatial Analysis</TabsTrigger>
-            <TabsTrigger value="trends">Trends</TabsTrigger>
-            <TabsTrigger value="table">Data Table</TabsTrigger>
+        <Tabs defaultValue="distributions" className="space-y-4 sm:space-y-6">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 h-auto">
+            <TabsTrigger value="distributions" className="text-xs sm:text-sm py-2 sm:py-3">Distributions</TabsTrigger>
+            <TabsTrigger value="correlations" className="text-xs sm:text-sm py-2 sm:py-3">Correlations</TabsTrigger>
+            <TabsTrigger value="spatial" className="text-xs sm:text-sm py-2 sm:py-3">Spatial</TabsTrigger>
+            <TabsTrigger value="trends" className="text-xs sm:text-sm py-2 sm:py-3">Trends</TabsTrigger>
+            <TabsTrigger value="table" className="text-xs sm:text-sm py-2 sm:py-3">Data</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="distributions" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <TabsContent value="distributions" className="space-y-4 sm:space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               {/* Area Distribution */}
               <Card>
                 <CardHeader>
@@ -397,6 +397,27 @@ export default function EDAPage() {
                     data={Object.entries(edaData.grades).map(([name, value]) => ({ name, value }))}
                     title="Performance Grade Distribution"
                     description="Risk-based grading across all outlets"
+                  />
+                </CardContent>
+              </Card>
+
+              {/* Risk Distribution */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Risk Level Distribution</CardTitle>
+                  <CardDescription>
+                    Missed cleaning probability breakdown
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <DistributionChart
+                    data={[
+                      { name: 'Low Risk (0-40%)', value: filteredPortfolioData.filter(item => item.p_miss_cleaning <= 0.4).length },
+                      { name: 'Medium Risk (40-70%)', value: filteredPortfolioData.filter(item => item.p_miss_cleaning > 0.4 && item.p_miss_cleaning <= 0.7).length },
+                      { name: 'High Risk (70-100%)', value: filteredPortfolioData.filter(item => item.p_miss_cleaning > 0.7).length }
+                    ]}
+                    title="Risk Level Distribution"
+                    description="Missed cleaning probability breakdown"
                   />
                 </CardContent>
               </Card>

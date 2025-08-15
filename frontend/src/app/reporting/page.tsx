@@ -716,27 +716,27 @@ export default function ReportingPage() {
 
   return (
     <MainLayout period="Q2 2023 (Apr-Jun)" run_id={scheduleData.run_id}>
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-2">
             Predicted Inspection Schedule - Q2 2023
           </h1>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-base sm:text-lg">
             ML-based restaurant inspection schedule for April-June 2023 with risk-prioritized routing & ETA<br/>
             <span className="text-sm">📅 Working days only (Mon-Fri) | ⏰ 24-hour format (08:00-20:00) | 🏢 All routes start from Dubai Mall</span>
           </p>
         </div>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Period</CardTitle>
               <Calendar className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-xl sm:text-2xl font-bold">
                 Apr 2023 - Jun 2023
               </div>
               <p className="text-xs text-muted-foreground">Q2 2023 restaurant schedule forecast</p>
@@ -749,7 +749,7 @@ export default function ReportingPage() {
               <FileText className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-xl sm:text-2xl font-bold">
                 {scheduleData.calendar.reduce((sum, day) => sum + day.items.length, 0)}
               </div>
               <p className="text-xs text-muted-foreground">restaurants scheduled</p>
@@ -762,7 +762,7 @@ export default function ReportingPage() {
               <Route className="h-4 w-4 text-red-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-red-600">
+              <div className="text-xl sm:text-2xl font-bold text-red-600">
                 {scheduleData.calendar.reduce((sum, day) => 
                   sum + day.items.filter(item => item.priority === 'High').length, 0
                 )}
@@ -771,43 +771,41 @@ export default function ReportingPage() {
             </CardContent>
           </Card>
 
-
-
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Areas Covered</CardTitle>
               <MapPin className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{scheduleData.areas.length}</div>
+              <div className="text-xl sm:text-2xl font-bold">{scheduleData.areas.length}</div>
               <p className="text-xs text-muted-foreground">restaurant zones</p>
             </CardContent>
           </Card>
         </div>
 
         {/* Main Content Tabs */}
-        <Tabs defaultValue="scheduling" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="scheduling">ML Predicted Schedule</TabsTrigger>
-            <TabsTrigger value="reports">Report Builder</TabsTrigger>
+        <Tabs defaultValue="scheduling" className="space-y-4 sm:space-y-6">
+          <TabsList className="grid w-full grid-cols-2 h-auto">
+            <TabsTrigger value="scheduling" className="text-xs sm:text-sm py-2 sm:py-3">ML Predicted Schedule</TabsTrigger>
+            <TabsTrigger value="reports" className="text-xs sm:text-sm py-2 sm:py-3">Report Builder</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="scheduling" className="space-y-6">
+          <TabsContent value="scheduling" className="space-y-4 sm:space-y-6">
             {/* Filters */}
             <Card>
               <CardHeader>
                 <CardTitle>Schedule Filters</CardTitle>
                 <CardDescription>
-                  Filter by month and inspector for Q2 2023 (April-June)
+                  Filter schedule by month, week, and inspector
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   <div>
-                    <label className="text-sm font-medium">Month</label>
+                    <label className="text-sm font-medium mb-2 block">Month</label>
                     <Select value={selectedMonth} onValueChange={handleMonthChange}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select Month" />
+                        <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
                         {getAvailableMonths().map(month => (
@@ -820,20 +818,23 @@ export default function ReportingPage() {
                   </div>
 
                   <div>
-                    <label className="text-sm font-medium">Date (Optional)</label>
-                    <Input
-                      type="date"
-                      value={selectedDate}
-                      onChange={(e) => {
-                        setSelectedDate(e.target.value);
-                      }}
-                      min="2023-04-01"
-                      max="2023-06-30"
-                    />
+                    <label className="text-sm font-medium mb-2 block">Week</label>
+                    <Select value={selectedWeek.toString()} onValueChange={(value) => handleWeekChange(parseInt(value))}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {getWeeksInMonth().map((_, index) => (
+                          <SelectItem key={index + 1} value={(index + 1).toString()}>
+                            Week {index + 1}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div>
-                    <label className="text-sm font-medium">Inspector</label>
+                    <label className="text-sm font-medium mb-2 block">Inspector</label>
                     <Select value={selectedInspector?.toString() || "all"} onValueChange={(value) => setSelectedInspector(value === "all" ? null : parseInt(value))}>
                       <SelectTrigger>
                         <SelectValue placeholder="All Inspectors" />
@@ -841,10 +842,10 @@ export default function ReportingPage() {
                       <SelectContent>
                         <SelectItem value="all">All Inspectors</SelectItem>
                         {Array.from(new Set(scheduleData.calendar.map(day => day.inspector_id))).map(id => {
-                          const day = scheduleData.calendar.find(d => d.inspector_id === id);
+                          const inspector = scheduleData.calendar.find(day => day.inspector_id === id);
                           return (
                             <SelectItem key={id} value={id.toString()}>
-                              {day?.inspector_name || `Inspector ${id}`}
+                              {inspector?.inspector_name || `Inspector ${id}`}
                             </SelectItem>
                           );
                         })}
@@ -855,32 +856,15 @@ export default function ReportingPage() {
                   <div className="flex items-end">
                     <Button 
                       variant="outline" 
+                      onClick={() => {
+                        setSelectedMonth("2023-04");
+                        setSelectedWeek(1);
+                        setSelectedInspector(null);
+                        setCurrentPage(1);
+                      }}
                       className="w-full"
-                      onClick={handleDownloadICS}
-                      disabled={downloadStatus === 'downloading'}
                     >
-                      {downloadStatus === 'downloading' ? (
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-                      ) : downloadStatus === 'success' ? (
-                        <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
-                      ) : downloadStatus === 'error' ? (
-                        <AlertCircle className="h-4 w-4 mr-2 text-red-600" />
-                      ) : (
-                        <Download className="h-4 w-4 mr-2" />
-                      )}
-                      Download ICS
-                    </Button>
-                  </div>
-
-                  <div className="flex items-end">
-                    <Button 
-                      variant="outline" 
-                      className="w-full"
-                      onClick={() => handleDownloadReport('schedule')}
-                      disabled={downloadStatus === 'downloading'}
-                    >
-                      <FileText className="h-4 w-4 mr-2" />
-                      Export CSV
+                      Reset Filters
                     </Button>
                   </div>
                 </div>
@@ -936,13 +920,13 @@ export default function ReportingPage() {
 
                   {/* Monthly Slider */}
                   <div className="bg-slate-50 p-4 rounded-lg mb-4">
-                    <div className="flex items-center justify-between mb-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 gap-2">
                       <h4 className="font-semibold text-slate-700">📅 Monthly Navigation</h4>
                       <div className="text-sm text-slate-500">
                         {new Date(selectedMonth + '-01').toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                       </div>
                     </div>
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                       <Button
                         variant="outline"
                         size="sm"
@@ -952,12 +936,14 @@ export default function ReportingPage() {
                           handleMonthChange(prevDate.toISOString().substring(0, 7));
                         }}
                         disabled={selectedMonth === "2023-04"}
+                        className="w-full sm:w-auto"
                       >
                         <ChevronLeft className="h-4 w-4 mr-1" />
-                        Previous Month
+                        <span className="hidden sm:inline">Previous Month</span>
+                        <span className="sm:hidden">Previous</span>
                       </Button>
                       
-                      <div className="flex gap-2">
+                      <div className="flex gap-1 sm:gap-2 justify-center flex-wrap">
                         {getAvailableMonths().map((month, index) => (
                           <Button
                             key={month.value}
@@ -966,7 +952,8 @@ export default function ReportingPage() {
                             onClick={() => handleMonthChange(month.value)}
                             className={selectedMonth === month.value ? "bg-blue-600 text-white" : ""}
                           >
-                            {month.label.split(' ')[0]}
+                            <span className="hidden sm:inline">{month.label.split(' ')[0]}</span>
+                            <span className="sm:hidden">{month.label.split(' ')[0].substring(0, 3)}</span>
                           </Button>
                         ))}
                       </div>
@@ -980,8 +967,10 @@ export default function ReportingPage() {
                           handleMonthChange(nextDate.toISOString().substring(0, 7));
                         }}
                         disabled={selectedMonth === "2023-06"}
+                        className="w-full sm:w-auto"
                       >
-                        Next Month
+                        <span className="hidden sm:inline">Next Month</span>
+                        <span className="sm:hidden">Next</span>
                         <ChevronRight className="h-4 w-4 ml-1" />
                       </Button>
                     </div>
@@ -989,24 +978,26 @@ export default function ReportingPage() {
 
                   {/* Weekly Slider */}
                   <div className="bg-green-50 p-4 rounded-lg mb-4">
-                    <div className="flex items-center justify-between mb-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 gap-2">
                       <h4 className="font-semibold text-green-700">📅 Weekly Navigation</h4>
                       <div className="text-sm text-green-600">
                         Week {selectedWeek} of {getWeeksInMonth().length} | {getWeeklyFilteredData().length} working days
                       </div>
                     </div>
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => handleWeekChange(selectedWeek - 1)}
                         disabled={selectedWeek === 1}
+                        className="w-full sm:w-auto"
                       >
                         <ChevronLeft className="h-4 w-4 mr-1" />
-                        Previous Week
+                        <span className="hidden sm:inline">Previous Week</span>
+                        <span className="sm:hidden">Previous</span>
                       </Button>
                       
-                      <div className="flex gap-2">
+                      <div className="flex gap-1 sm:gap-2 justify-center flex-wrap">
                         {getWeeksInMonth().map((week, index) => {
                           const weekNumber = index + 1;
                           const weekStart = week[0]?.date ? new Date(week[0].date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
@@ -1032,8 +1023,10 @@ export default function ReportingPage() {
                         size="sm"
                         onClick={() => handleWeekChange(selectedWeek + 1)}
                         disabled={selectedWeek === getWeeksInMonth().length}
+                        className="w-full sm:w-auto"
                       >
-                        Next Week
+                        <span className="hidden sm:inline">Next Week</span>
+                        <span className="sm:hidden">Next</span>
                         <ChevronRight className="h-4 w-4 ml-1" />
                       </Button>
                     </div>
@@ -1047,48 +1040,50 @@ export default function ReportingPage() {
                   </div>
 
                   {/* Date Selector */}
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
                     <h3 className="text-lg font-semibold">
                       {selectedDate && selectedDate !== "all" ? new Date(selectedDate).toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' }) : 'All Dates'}
                     </h3>
-                                          <Select
-                        value={selectedDate}
-                        onValueChange={(date) => {
-                          setSelectedDate(date);
-                          setCurrentPage(1); // Reset to first page when date changes
-                        }}
-                      >
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Select Date" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Dates in Week {selectedWeek}</SelectItem>
-                          {getWeeklyFilteredData().map(day => (
-                            <SelectItem key={day.date} value={day.date}>
-                              {new Date(day.date).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                    <Select
+                      value={selectedDate}
+                      onValueChange={(date) => {
+                        setSelectedDate(date);
+                        setCurrentPage(1); // Reset to first page when date changes
+                      }}
+                    >
+                      <SelectTrigger className="w-full sm:w-[180px]">
+                        <SelectValue placeholder="Select Date" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Dates in Week {selectedWeek}</SelectItem>
+                        {getWeeklyFilteredData().map(day => (
+                          <SelectItem key={day.date} value={day.date}>
+                            {new Date(day.date).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   {/* Pagination */}
                   {getTotalPages() > 1 && (
-                    <div className="flex justify-center items-center space-x-2">
+                    <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:space-x-2">
                       <Button
                         variant="outline"
                         onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1}
+                        className="w-full sm:w-auto"
                       >
                         Previous
                       </Button>
-                      <span className="text-sm text-muted-foreground">
+                      <span className="text-sm text-muted-foreground text-center">
                         Page {currentPage} of {getTotalPages()}
                       </span>
                       <Button
                         variant="outline"
                         onClick={() => handlePageChange(currentPage + 1)}
                         disabled={currentPage === getTotalPages()}
+                        className="w-full sm:w-auto"
                       >
                         Next
                       </Button>
@@ -1100,7 +1095,7 @@ export default function ReportingPage() {
                     .filter(day => !selectedInspector || day.inspector_id === selectedInspector)
                     .map((day, dayIndex) => (
                       <div key={`${day.date}-${day.inspector_id}-${dayIndex}`} className="border rounded-lg p-4">
-                        <div className="flex items-center justify-between mb-3">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 gap-3">
                           <div className="flex items-center gap-3">
                             <CalendarDays className="h-5 w-5 text-blue-600" />
                             <div>
@@ -1117,7 +1112,7 @@ export default function ReportingPage() {
                               </p>
                             </div>
                           </div>
-                          <div className="flex gap-2">
+                          <div className="flex gap-2 flex-wrap">
                             <Badge variant="outline">
                               {day.items.length} restaurants
                             </Badge>
@@ -1130,37 +1125,37 @@ export default function ReportingPage() {
                         {/* Restaurant Items */}
                         <div className="space-y-3">
                           {day.items.map((item: any, index: number) => (
-                            <div key={`${item.ics_uid}-${dayIndex}-${index}`} className="flex items-center gap-4 p-3 bg-muted/30 rounded-lg">
-                              <div className="flex items-center justify-center w-8 h-8 bg-blue-100 text-blue-600 rounded-full font-semibold">
+                            <div key={`${item.ics_uid}-${dayIndex}-${index}`} className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-3 bg-muted/30 rounded-lg">
+                              <div className="flex items-center justify-center w-8 h-8 bg-blue-100 text-blue-600 rounded-full font-semibold flex-shrink-0">
                                 {index + 1}
                               </div>
                               
-                              <div className="flex-1">
-                                <div className="flex items-center gap-2 mb-1">
-                                  <h4 className="font-medium">{item.outlet_name}</h4>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+                                  <h4 className="font-medium truncate">{item.outlet_name}</h4>
                                   <Badge className={getPriorityColor(item.priority)}>
                                     {item.priority} Risk
                                   </Badge>
                                 </div>
                                 
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-                                  <div>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 text-sm">
+                                  <div className="min-w-0">
                                     <span className="text-muted-foreground">Area:</span>
-                                    <span className="ml-2 font-medium">{item.area}</span>
+                                    <span className="ml-2 font-medium truncate block">{item.area}</span>
                                   </div>
-                                  <div>
+                                  <div className="min-w-0">
                                     <span className="text-muted-foreground">Time:</span>
                                     <span className="ml-2 font-medium">
                                       {item.scheduled_window[0]} - {item.scheduled_window[1]}
                                     </span>
                                   </div>
-                                  <div>
+                                  <div className="min-w-0">
                                     <span className="text-muted-foreground">Risk:</span>
                                     <span className={`ml-2 font-medium ${getRiskColor(item.p_miss_cleaning)}`}>
                                       {(item.p_miss_cleaning * 100).toFixed(1)}%
                                     </span>
                                   </div>
-                                  <div>
+                                  <div className="min-w-0">
                                     <span className="text-muted-foreground">Volume:</span>
                                     <span className="ml-2 font-medium">
                                       {item.forecast_volume_liters.toLocaleString()}L
@@ -1169,22 +1164,26 @@ export default function ReportingPage() {
                                 </div>
                               </div>
 
-                              <div className="flex gap-2">
+                              <div className="flex gap-2 flex-shrink-0">
                                 <Button 
                                   variant="outline" 
                                   size="sm"
                                   onClick={() => handleViewRoute(day)}
+                                  className="w-full sm:w-auto"
                                 >
                                   <MapPin className="h-4 w-4 mr-1" />
-                                  Route
+                                  <span className="hidden sm:inline">Route</span>
+                                  <span className="sm:hidden">Route</span>
                                 </Button>
                                 <Button 
                                   variant="outline" 
                                   size="sm"
                                   onClick={() => handleViewETA(item, day)}
+                                  className="w-full sm:w-auto"
                                 >
                                   <Clock className="h-4 w-4 mr-1" />
-                                  ETA
+                                  <span className="hidden sm:inline">ETA</span>
+                                  <span className="sm:hidden">ETA</span>
                                 </Button>
                               </div>
                             </div>
@@ -1208,7 +1207,7 @@ export default function ReportingPage() {
               <CardContent>
                 <div className="space-y-4">
                   {/* Route Selection Controls */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-muted/20 rounded-lg">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 bg-muted/20 rounded-lg">
                     <div>
                       <label className="text-sm font-medium mb-2 block">Select Inspector</label>
                       <Select 
@@ -1292,7 +1291,7 @@ export default function ReportingPage() {
                   {/* Inspector Contribution Summary */}
                   <div className="bg-yellow-50 p-4 rounded-lg mb-4">
                     <h4 className="font-semibold text-yellow-800 mb-3">Inspector Contribution - Week {selectedWeek} in {getAvailableMonths().find(m => m.value === selectedMonth)?.label}</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                       {Array.from(new Set(getWeeklyFilteredData().map(day => day.inspector_id))).map(id => {
                         const inspectorDays = getWeeklyFilteredData().filter(day => day.inspector_id === id);
                         const day = inspectorDays[0];
@@ -1303,10 +1302,10 @@ export default function ReportingPage() {
                         
                         return (
                           <div key={id} className="text-center p-3 bg-white rounded-lg border border-yellow-200">
-                            <div className="text-lg font-semibold text-yellow-700 mb-1">
+                            <div className="text-base sm:text-lg font-semibold text-yellow-700 mb-1 truncate">
                               {day?.inspector_name || `Inspector ${id}`}
                             </div>
-                            <div className="text-2xl font-bold text-yellow-600">
+                            <div className="text-xl sm:text-2xl font-bold text-yellow-600">
                               {totalInspections}
                             </div>
                             <div className="text-sm text-yellow-600">Weekly Inspections</div>
@@ -1332,13 +1331,11 @@ export default function ReportingPage() {
                         </CardDescription>
                       </CardHeader>
                       <CardContent>
-
-
                         {/* Visual Map */}
                         <div className="mb-6">
                           <RealDubaiMap 
                             routeData={selectedRouteData}
-                            height={500}
+                            height={400}
                             onStopClick={(stop) => {
                               setSelectedStop(stop);
                               setShowETADialog(true);
@@ -1351,11 +1348,11 @@ export default function ReportingPage() {
                           <h3 className="text-lg font-semibold">Route Details with Pin Points & ETA</h3>
                           
                           {/* Depot */}
-                          <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
-                            <div className="flex items-center justify-center w-8 h-8 bg-blue-600 text-white rounded-full font-semibold">
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-3 bg-blue-50 rounded-lg">
+                            <div className="flex items-center justify-center w-8 h-8 bg-blue-600 text-white rounded-full font-semibold flex-shrink-0">
                               🏢
                             </div>
-                            <div>
+                            <div className="flex-1 min-w-0">
                               <h4 className="font-medium">Inspector Depot - Dubai Mall (Start Point)</h4>
                               <p className="text-sm text-muted-foreground">
                                 📍 Location: {selectedRouteData.depot_location.lat.toFixed(4)}, {selectedRouteData.depot_location.lon.toFixed(4)}
@@ -1399,23 +1396,23 @@ export default function ReportingPage() {
                               return (
                                 <div 
                                   key={stop.outlet_id} 
-                                  className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 border-l-4 border-blue-400"
+                                  className="flex flex-col sm:flex-row sm:items-start gap-3 p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 border-l-4 border-blue-400"
                                   onClick={() => {
                                     setSelectedStop(stop);
                                     setShowETADialog(true);
                                   }}
                                 >
                                   <div 
-                                    className={`flex items-center justify-center w-10 h-10 text-white rounded-full font-semibold ${
+                                    className={`flex items-center justify-center w-10 h-10 text-white rounded-full font-semibold flex-shrink-0 ${
                                       stop.priority === 'High' ? 'bg-red-500' :
                                       stop.priority === 'Med' ? 'bg-yellow-500' : 'bg-green-500'
                                     }`}
                                   >
                                     {stop.order}
                                   </div>
-                                  <div className="flex-1">
-                                    <div className="flex items-center gap-2 mb-2">
-                                      <h4 className="font-semibold text-lg">{stop.outlet_name}</h4>
+                                  <div className="flex-1 min-w-0">
+                                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+                                      <h4 className="font-semibold text-base sm:text-lg truncate">{stop.outlet_name}</h4>
                                       <Badge 
                                         variant="outline"
                                         className={`${
@@ -1427,45 +1424,46 @@ export default function ReportingPage() {
                                         {stop.priority} Risk
                                       </Badge>
                                     </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-sm">
-                                      <div>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 text-sm">
+                                      <div className="min-w-0">
                                         <span className="text-muted-foreground">📍 Coordinates:</span>
-                                        <p className="font-medium">{stop.lat.toFixed(4)}, {stop.lon.toFixed(4)}</p>
+                                        <p className="font-medium truncate">{stop.lat.toFixed(4)}, {stop.lon.toFixed(4)}</p>
                                       </div>
-                                      <div>
+                                      <div className="min-w-0">
                                         <span className="text-muted-foreground">📍 Area:</span>
-                                        <p className="font-medium">{stop.area}</p>
+                                        <p className="font-medium truncate">{stop.area}</p>
                                       </div>
-                                      <div>
+                                      <div className="min-w-0">
                                         <span className="text-muted-foreground">🕒 Time Window:</span>
                                         <p className="font-medium">{stop.scheduled_window[0]} - {stop.scheduled_window[1]}</p>
                                       </div>
-                                      <div>
+                                      <div className="min-w-0">
                                         <span className="text-muted-foreground">⚠️ Risk Score:</span>
                                         <p className="font-medium text-red-600">{(stop.p_miss_cleaning * 100).toFixed(1)}%</p>
                                       </div>
-                                      <div>
+                                      <div className="min-w-0">
                                         <span className="text-muted-foreground">🛢️ Volume:</span>
                                         <p className="font-medium">{stop.forecast_volume_liters.toLocaleString()}L</p>
                                       </div>
-                                      <div>
-                                        <span className="text-muted-foreground">📏 Distance from prev:</span>
+                                      <div className="min-w-0">
+                                        <span className="text-muted-foreground">📏 Distance:</span>
                                         <p className="font-medium text-blue-600">{distanceFromPrev.toFixed(1)} km</p>
                                       </div>
-                                      <div>
-                                        <span className="text-muted-foreground">🚗 Travel time:</span>
+                                      <div className="min-w-0">
+                                        <span className="text-muted-foreground">🚗 Travel:</span>
                                         <p className="font-medium">{Math.round((distanceFromPrev / 30) * 60)} min</p>
                                       </div>
-                                      <div>
+                                      <div className="min-w-0">
                                         <span className="text-muted-foreground">🕐 ETA:</span>
                                         <p className="font-medium text-green-600">{stop.eta || `${8 + index}:${(index * 15).toString().padStart(2, '0')}`}</p>
                                       </div>
                                     </div>
                                   </div>
-                                  <div className="text-right">
-                                    <Button variant="outline" size="sm">
+                                  <div className="flex justify-center sm:justify-end">
+                                    <Button variant="outline" size="sm" className="w-full sm:w-auto">
                                       <Clock className="h-4 w-4 mr-1" />
-                                      View ETA
+                                      <span className="hidden sm:inline">View ETA</span>
+                                      <span className="sm:hidden">ETA</span>
                                     </Button>
                                   </div>
                                 </div>
@@ -1498,7 +1496,7 @@ export default function ReportingPage() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="reports" className="space-y-6">
+          <TabsContent value="reports" className="space-y-4 sm:space-y-6">
             {/* Report Builder */}
             <Card>
               <CardHeader>
@@ -1508,7 +1506,7 @@ export default function ReportingPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                   <div className="space-y-4">
                     <h4 className="font-semibold">Report Types</h4>
                     <div className="space-y-2">
@@ -1519,7 +1517,8 @@ export default function ReportingPage() {
                         disabled={downloadStatus === 'downloading'}
                       >
                         <FileText className="h-4 w-4 mr-2" />
-                        Monthly Performance Report
+                        <span className="hidden sm:inline">Monthly Performance Report</span>
+                        <span className="sm:hidden">Monthly Performance</span>
                       </Button>
                       <Button 
                         variant="outline" 
@@ -1528,7 +1527,8 @@ export default function ReportingPage() {
                         disabled={downloadStatus === 'downloading'}
                       >
                         <Route className="h-4 w-4 mr-2" />
-                        Route Optimization Report
+                        <span className="hidden sm:inline">Route Optimization Report</span>
+                        <span className="sm:hidden">Route Optimization</span>
                       </Button>
                       <Button 
                         variant="outline" 
@@ -1537,7 +1537,8 @@ export default function ReportingPage() {
                         disabled={downloadStatus === 'downloading'}
                       >
                         <MapPin className="h-4 w-4 mr-2" />
-                        Geographic Analysis Report
+                        <span className="hidden sm:inline">Geographic Analysis Report</span>
+                        <span className="sm:hidden">Geographic Analysis</span>
                       </Button>
                       <Button 
                         variant="outline" 
@@ -1546,7 +1547,8 @@ export default function ReportingPage() {
                         disabled={downloadStatus === 'downloading'}
                       >
                         <Clock className="h-4 w-4 mr-2" />
-                        Scheduling Efficiency Report
+                        <span className="hidden sm:inline">Scheduling Efficiency Report</span>
+                        <span className="sm:hidden">Scheduling Efficiency</span>
                       </Button>
                     </div>
                   </div>
@@ -1582,70 +1584,78 @@ export default function ReportingPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between p-3 border rounded-lg">
-                    <div>
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 border rounded-lg gap-3">
+                    <div className="flex-1 min-w-0">
                       <h4 className="font-medium">April 2023 Restaurant Schedule</h4>
                       <p className="text-sm text-muted-foreground">Generated 2 hours ago</p>
                     </div>
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm">
+                    <div className="flex gap-2 flex-shrink-0">
+                      <Button variant="outline" size="sm" className="w-full sm:w-auto">
                         <Download className="h-4 w-4 mr-1" />
-                        Download
+                        <span className="hidden sm:inline">Download</span>
+                        <span className="sm:hidden">DL</span>
                       </Button>
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" className="w-full sm:w-auto">
                         <Mail className="h-4 w-4 mr-1" />
-                        Share
+                        <span className="hidden sm:inline">Share</span>
+                        <span className="sm:hidden">Share</span>
                       </Button>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between p-3 border rounded-lg">
-                    <div>
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 border rounded-lg gap-3">
+                    <div className="flex-1 min-w-0">
                       <h4 className="font-medium">May 2023 Restaurant Schedule</h4>
                       <p className="text-sm text-muted-foreground">Generated 1 day ago</p>
                     </div>
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm">
+                    <div className="flex gap-2 flex-shrink-0">
+                      <Button variant="outline" size="sm" className="w-full sm:w-auto">
                         <Download className="h-4 w-4 mr-1" />
-                        Download
+                        <span className="hidden sm:inline">Download</span>
+                        <span className="sm:hidden">DL</span>
                       </Button>
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" className="w-full sm:w-auto">
                         <Mail className="h-4 w-4 mr-1" />
-                        Share
+                        <span className="hidden sm:inline">Share</span>
+                        <span className="sm:hidden">Share</span>
                       </Button>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between p-3 border rounded-lg">
-                    <div>
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 border rounded-lg gap-3">
+                    <div className="flex-1 min-w-0">
                       <h4 className="font-medium">June 2023 Restaurant Schedule</h4>
                       <p className="text-sm text-muted-foreground">Generated 2 days ago</p>
                     </div>
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm">
+                    <div className="flex gap-2 flex-shrink-0">
+                      <Button variant="outline" size="sm" className="w-full sm:w-auto">
                         <Download className="h-4 w-4 mr-1" />
-                        Download
+                        <span className="hidden sm:inline">Download</span>
+                        <span className="sm:hidden">DL</span>
                       </Button>
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" className="w-full sm:w-auto">
                         <Mail className="h-4 w-4 mr-1" />
-                        Share
+                        <span className="hidden sm:inline">Share</span>
+                        <span className="sm:hidden">Share</span>
                       </Button>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between p-3 border rounded-lg">
-                    <div>
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 border rounded-lg gap-3">
+                    <div className="flex-1 min-w-0">
                       <h4 className="font-medium">Q2 2023 Route Optimization</h4>
                       <p className="text-sm text-muted-foreground">Generated 3 days ago</p>
                     </div>
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm">
+                    <div className="flex gap-2 flex-shrink-0">
+                      <Button variant="outline" size="sm" className="w-full sm:w-auto">
                         <Download className="h-4 w-4 mr-1" />
-                        Download
+                        <span className="hidden sm:inline">Download</span>
+                        <span className="sm:hidden">DL</span>
                       </Button>
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" className="w-full sm:w-auto">
                         <Mail className="h-4 w-4 mr-1" />
-                        Share
+                        <span className="hidden sm:inline">Share</span>
+                        <span className="sm:hidden">Share</span>
                       </Button>
                     </div>
                   </div>

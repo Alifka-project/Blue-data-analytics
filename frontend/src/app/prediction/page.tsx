@@ -110,26 +110,26 @@ export default function PredictionPage() {
 
   return (
     <MainLayout>
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-2">
             Portfolio & Route Viewer
           </h1>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-base sm:text-lg">
             Predict missed cleaning (now/next), forecast volumes, and view smart schedules
           </p>
         </div>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Outlets</CardTitle>
               <MapPin className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{portfolioData.length}</div>
+              <div className="text-xl sm:text-2xl font-bold">{portfolioData.length}</div>
               <p className="text-xs text-muted-foreground">in portfolio</p>
             </CardContent>
           </Card>
@@ -140,7 +140,7 @@ export default function PredictionPage() {
               <AlertTriangle className="h-4 w-4 text-red-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-red-600">
+              <div className="text-xl sm:text-2xl font-bold text-red-600">
                 {portfolioData.filter(item => item.p_miss_cleaning > 0.7).length}
               </div>
               <p className="text-xs text-muted-foreground">outlets</p>
@@ -153,7 +153,7 @@ export default function PredictionPage() {
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-xl sm:text-2xl font-bold">
                 {(portfolioData.reduce((sum, item) => sum + item.risk_illegal_dump, 0) / portfolioData.length * 100).toFixed(1)}%
               </div>
               <p className="text-xs text-muted-foreground">portfolio average</p>
@@ -166,7 +166,7 @@ export default function PredictionPage() {
               <Calendar className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-xl sm:text-2xl font-bold">
                 {portfolioData.filter(item => {
                   const nextDue = new Date(item.next_due_date);
                   const today = new Date();
@@ -180,13 +180,13 @@ export default function PredictionPage() {
         </div>
 
         {/* Main Content Tabs */}
-        <Tabs defaultValue="portfolio" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="portfolio">Portfolio Table</TabsTrigger>
-            <TabsTrigger value="route-viewer">Route Viewer</TabsTrigger>
+        <Tabs defaultValue="portfolio" className="space-y-4 sm:space-y-6">
+          <TabsList className="grid w-full grid-cols-2 h-auto">
+            <TabsTrigger value="portfolio" className="text-xs sm:text-sm py-2 sm:py-3">Portfolio Table</TabsTrigger>
+            <TabsTrigger value="route-viewer" className="text-xs sm:text-sm py-2 sm:py-3">Route Viewer</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="portfolio" className="space-y-6">
+          <TabsContent value="portfolio" className="space-y-4 sm:space-y-6">
             {/* Filters */}
             <Card>
               <CardHeader>
@@ -196,9 +196,9 @@ export default function PredictionPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   <div>
-                    <label className="text-sm font-medium">Area</label>
+                    <label className="text-sm font-medium mb-2 block">Area</label>
                     <Select value={filters.area} onValueChange={(value) => setFilters(prev => ({ ...prev, area: value }))}>
                       <SelectTrigger>
                         <SelectValue placeholder="All Areas" />
@@ -213,7 +213,7 @@ export default function PredictionPage() {
                   </div>
 
                   <div>
-                    <label className="text-sm font-medium">Category</label>
+                    <label className="text-sm font-medium mb-2 block">Category</label>
                     <Select value={filters.category} onValueChange={(value) => setFilters(prev => ({ ...prev, category: value }))}>
                       <SelectTrigger>
                         <SelectValue placeholder="All Categories" />
@@ -228,30 +228,30 @@ export default function PredictionPage() {
                   </div>
 
                   <div>
-                    <label className="text-sm font-medium">Grade</label>
+                    <label className="text-sm font-medium mb-2 block">Grade</label>
                     <Select value={filters.grade} onValueChange={(value) => setFilters(prev => ({ ...prev, grade: value }))}>
                       <SelectTrigger>
                         <SelectValue placeholder="All Grades" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all">All Grades</SelectItem>
-                        {Array.from(new Set(portfolioData.map(item => item.grade))).map(grade => (
-                          <SelectItem key={grade} value={grade}>{grade}</SelectItem>
+                        {['A', 'B', 'C', 'D'].map(grade => (
+                          <SelectItem key={grade} value={grade}>Grade {grade}</SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div>
-                    <label className="text-sm font-medium">Min Risk Score</label>
+                    <label className="text-sm font-medium mb-2 block">Min Risk</label>
                     <Input
                       type="number"
+                      placeholder="0.0"
+                      step="0.1"
                       min="0"
                       max="1"
-                      step="0.1"
                       value={filters.minRisk}
                       onChange={(e) => setFilters(prev => ({ ...prev, minRisk: parseFloat(e.target.value) || 0 }))}
-                      placeholder="0.0"
                     />
                   </div>
                 </div>
@@ -261,9 +261,9 @@ export default function PredictionPage() {
             {/* Portfolio Table */}
             <Card>
               <CardHeader>
-                <CardTitle>Portfolio Table</CardTitle>
+                <CardTitle>Portfolio Data</CardTitle>
                 <CardDescription>
-                  Outlet | Area | Category | Grade | p(miss) | Forecast (L) | Next due | IllegalDumpRisk | Drivers(#)
+                  {filteredPortfolio.length} outlets matching current filters
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -271,21 +271,23 @@ export default function PredictionPage() {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Outlet</TableHead>
-                        <TableHead>Area</TableHead>
-                        <TableHead>Category</TableHead>
-                        <TableHead>Grade</TableHead>
-                        <TableHead>Miss Prob.</TableHead>
-                        <TableHead>Forecast (L)</TableHead>
-                        <TableHead>Next Due</TableHead>
-                        <TableHead>Risk Score</TableHead>
-                        <TableHead>Actions</TableHead>
+                        <TableHead className="min-w-[200px]">Outlet</TableHead>
+                        <TableHead className="min-w-[100px]">Area</TableHead>
+                        <TableHead className="min-w-[100px]">Category</TableHead>
+                        <TableHead className="min-w-[80px]">Grade</TableHead>
+                        <TableHead className="min-w-[80px]">Risk</TableHead>
+                        <TableHead className="min-w-[100px]">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {filteredPortfolio.slice(0, 50).map((item) => (
+                      {filteredPortfolio.slice(0, 20).map((item) => (
                         <TableRow key={item.outlet_id}>
-                          <TableCell className="font-medium">{item.name}</TableCell>
+                          <TableCell>
+                            <div>
+                              <p className="font-medium">{item.name}</p>
+                              <p className="text-xs text-muted-foreground">ID: {item.outlet_id}</p>
+                            </div>
+                          </TableCell>
                           <TableCell>{item.area}</TableCell>
                           <TableCell>{item.category}</TableCell>
                           <TableCell>
@@ -293,11 +295,10 @@ export default function PredictionPage() {
                               {item.grade}
                             </Badge>
                           </TableCell>
-                          <TableCell>{(item.p_miss_cleaning * 100).toFixed(1)}%</TableCell>
-                          <TableCell>{item.forecast_volume_liters.toLocaleString()}</TableCell>
-                          <TableCell>{item.next_due_date}</TableCell>
-                          <TableCell className={getRiskColor(item.risk_illegal_dump)}>
-                            {(item.risk_illegal_dump * 100).toFixed(1)}%
+                          <TableCell>
+                            <span className={`font-bold ${getRiskColor(item.risk_illegal_dump)}`}>
+                              {(item.risk_illegal_dump * 100).toFixed(1)}%
+                            </span>
                           </TableCell>
                           <TableCell>
                             <Dialog>
@@ -308,7 +309,7 @@ export default function PredictionPage() {
                                   onClick={() => setSelectedOutlet(item)}
                                 >
                                   <Eye className="h-4 w-4 mr-2" />
-                                  View
+                                  <span className="hidden sm:inline">View</span>
                                 </Button>
                               </DialogTrigger>
                               <DialogContent className="max-w-2xl">
@@ -319,7 +320,7 @@ export default function PredictionPage() {
                                   </DialogDescription>
                                 </DialogHeader>
                                 <div className="space-y-4">
-                                  <div className="grid grid-cols-2 gap-4">
+                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
                                       <h4 className="font-semibold">Basic Info</h4>
                                       <p className="text-sm text-muted-foreground">Area: {item.area}</p>
@@ -336,15 +337,15 @@ export default function PredictionPage() {
                                   <div>
                                     <h4 className="font-semibold">Risk Analysis</h4>
                                     <div className="space-y-2">
-                                      <div className="flex justify-between">
+                                      <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
                                         <span>Missed Cleaning Probability:</span>
                                         <span className="font-semibold">{(item.p_miss_cleaning * 100).toFixed(1)}%</span>
                                       </div>
-                                      <div className="flex justify-between">
+                                      <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
                                         <span>Illegal Dump Risk:</span>
                                         <span className="font-semibold">{(item.risk_illegal_dump * 100).toFixed(1)}%</span>
                                       </div>
-                                      <div className="flex justify-between">
+                                      <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
                                         <span>Volume Forecast:</span>
                                         <span className="font-semibold">{item.forecast_volume_liters.toLocaleString()} L</span>
                                       </div>
@@ -355,7 +356,7 @@ export default function PredictionPage() {
                                     <h4 className="font-semibold">SHAP Top 3 Drivers</h4>
                                     <div className="space-y-2">
                                       {item.shap_top3.map((driver, index) => (
-                                        <div key={index} className="flex justify-between items-center">
+                                        <div key={index} className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                                           <span className="text-sm">{driver.feature}</span>
                                           <Badge variant="outline">{driver.impact.toFixed(3)}</Badge>
                                         </div>
@@ -375,7 +376,7 @@ export default function PredictionPage() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="route-viewer" className="space-y-6">
+          <TabsContent value="route-viewer" className="space-y-4 sm:space-y-6">
             <Card>
               <CardHeader>
                 <CardTitle>Route Viewer</CardTitle>
@@ -388,7 +389,7 @@ export default function PredictionPage() {
                   portfolioData={portfolioData}
                   title="Route Viewer"
                   description="Interactive map showing outlet locations and optimized routes"
-                  height={600}
+                  height={400}
                 />
               </CardContent>
             </Card>

@@ -2,16 +2,20 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Logo } from "@/components/ui/logo";
 import { RealtimeClock } from "@/components/ui/realtime-clock";
+import { Button } from "@/components/ui/button";
 import {
   BarChart3,
   Map,
   MessageSquare,
   PieChart,
   TrendingUp,
+  Menu,
+  X,
 } from "lucide-react";
 
 const navigation = [
@@ -49,6 +53,7 @@ const navigation = [
 
 export function Header() {
   const pathname = usePathname();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -66,8 +71,8 @@ export function Header() {
           </div>
         </div>
         
-        {/* Center: Navigation */}
-        <nav className="flex items-center space-x-1 text-sm font-medium">
+        {/* Center: Navigation - Hidden on mobile */}
+        <nav className="hidden md:flex items-center space-x-1 text-sm font-medium">
           {navigation.map((item) => {
             const isActive = pathname === item.href;
             return (
@@ -88,11 +93,57 @@ export function Header() {
           })}
         </nav>
 
-        {/* Right side: Clock/Date (NO settings, NO version) */}
-        <div className="flex items-center">
+        {/* Right side: Clock/Date + Mobile Menu Button */}
+        <div className="flex items-center space-x-2">
           <RealtimeClock />
+          
+          {/* Mobile menu button */}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="md:hidden"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
+          </Button>
         </div>
       </div>
+
+      {/* Mobile Navigation Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+          <div className="container mx-auto px-4 py-4">
+            <nav className="flex flex-col space-y-2">
+              {navigation.map((item) => {
+                const isActive = pathname === item.href;
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={cn(
+                      "flex items-center space-x-3 rounded-lg px-4 py-3 text-sm font-medium transition-all duration-200",
+                      isActive
+                        ? "bg-gradient-to-r from-blue-500/10 to-green-500/10 text-foreground border border-blue-200/50 shadow-sm"
+                        : "text-foreground/70 hover:text-foreground hover:bg-accent/50"
+                    )}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <item.icon className="h-5 w-5" />
+                    <div className="flex flex-col">
+                      <span className="font-medium">{item.name}</span>
+                      <span className="text-xs text-muted-foreground">{item.description}</span>
+                    </div>
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

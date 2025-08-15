@@ -18,9 +18,9 @@ export function MainLayout({
   model_version 
 }: MainLayoutProps) {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <Header />
-      <main className="flex-1">
+      <main className="flex-1 w-full">
         {children}
       </main>
       <Footer 
@@ -32,4 +32,5 @@ export function MainLayout({
     </div>
   );
 }
+
 

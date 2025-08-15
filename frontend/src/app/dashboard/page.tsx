@@ -289,26 +289,26 @@ export default function DashboardPage() {
       run_id={kpiData.run_id}
       model_version={kpiData.model_version}
     >
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-2">
             Inspection Management Dashboard
           </h1>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-base sm:text-lg">
             Real-time inspection status, risk analysis, and insights for inspectors and auditors
           </p>
         </div>
 
         {/* KPI Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Grease Collected</CardTitle>
               <BarChart3 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{kpiData.grease_collected_tons.toLocaleString()}</div>
+              <div className="text-xl sm:text-2xl font-bold">{kpiData.grease_collected_tons.toLocaleString()}</div>
               <p className="text-xs text-muted-foreground">
                 vs {kpiData.forecast_tons.toLocaleString()} forecast
               </p>
@@ -327,7 +327,7 @@ export default function DashboardPage() {
               <Target className="h-4 w-4 text-red-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-red-600">
+              <div className="text-xl sm:text-2xl font-bold text-red-600">
                 {portfolioData.filter(item => item.p_miss_cleaning > 0.8).length}
               </div>
               <p className="text-xs text-muted-foreground">extremely high risk (&gt;80%) requiring immediate action</p>
@@ -343,7 +343,7 @@ export default function DashboardPage() {
               <AlertTriangle className="h-4 w-4 text-red-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-red-600">{kpiData.missed_cleanings.toLocaleString()}</div>
+              <div className="text-xl sm:text-2xl font-bold text-red-600">{kpiData.missed_cleanings.toLocaleString()}</div>
               <p className="text-xs text-muted-foreground">requires attention</p>
             </CardContent>
           </Card>
@@ -354,7 +354,7 @@ export default function DashboardPage() {
               <Clock className="h-4 w-4 text-orange-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-orange-600">
+              <div className="text-xl sm:text-2xl font-bold text-orange-600">
                 {scheduleData?.calendar ? 
                   scheduleData.calendar.reduce((sum: number, day: any) => sum + day.items.length, 0) : 
                   0
@@ -380,14 +380,14 @@ export default function DashboardPage() {
         </div>
 
         {/* Additional KPI Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Forecast Accuracy</CardTitle>
               <Target className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{(100 - forecastAccuracy).toFixed(1)}%</div>
+              <div className="text-xl sm:text-2xl font-bold">{(100 - forecastAccuracy).toFixed(1)}%</div>
               <p className="text-xs text-muted-foreground">prediction accuracy</p>
               <div className="mt-2">
                 <Progress value={100 - forecastAccuracy} className="h-2" />
@@ -401,7 +401,7 @@ export default function DashboardPage() {
               <AlertTriangle className="h-4 w-4 text-orange-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-orange-600">
+              <div className="text-xl sm:text-2xl font-bold text-orange-600">
                 {portfolioData.filter(item => item.risk_illegal_dump > 0.6).length}
               </div>
               <p className="text-xs text-muted-foreground">high illegal dump risk outlets</p>
@@ -417,7 +417,7 @@ export default function DashboardPage() {
               <Clock className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-xl sm:text-2xl font-bold">
                 {scheduleData?.calendar ? 
                   scheduleData.calendar
                     .filter((day: any) => {
@@ -435,17 +435,17 @@ export default function DashboardPage() {
         </div>
 
         {/* Main Dashboard Content */}
-        <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="trends">Trends</TabsTrigger>
-            <TabsTrigger value="risks">Risk Analysis</TabsTrigger>
-            <TabsTrigger value="geographic">Geographic</TabsTrigger>
+        <Tabs defaultValue="overview" className="space-y-4 sm:space-y-6">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 h-auto">
+            <TabsTrigger value="overview" className="text-xs sm:text-sm py-2 sm:py-3">Overview</TabsTrigger>
+            <TabsTrigger value="trends" className="text-xs sm:text-sm py-2 sm:py-3">Trends</TabsTrigger>
+            <TabsTrigger value="risks" className="text-xs sm:text-sm py-2 sm:py-3">Risk Analysis</TabsTrigger>
+            <TabsTrigger value="geographic" className="text-xs sm:text-sm py-2 sm:py-3">Geographic</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="overview" className="space-y-6">
+          <TabsContent value="overview" className="space-y-4 sm:space-y-6">
             {/* Performance Summary */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               <Card>
                 <CardHeader>
                   <CardTitle>Performance Summary</CardTitle>
@@ -454,32 +454,32 @@ export default function DashboardPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="flex justify-between items-center">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                     <span className="text-sm font-medium">Grease Collection Target</span>
                     <Badge variant="outline">
                       {((kpiData.grease_collected_tons / kpiData.forecast_tons) * 100).toFixed(1)}% Achieved
                     </Badge>
                   </div>
-                  <div className="flex justify-between items-center">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                     <span className="text-sm font-medium">Inspection Coverage</span>
                     <Badge variant="default">
                       {((portfolioData.length - kpiData.missed_cleanings) / portfolioData.length * 100).toFixed(1)}% Complete
                     </Badge>
                   </div>
-                  <div className="flex justify-between items-center">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                     <span className="text-sm font-medium">Critical Risk Level</span>
                     <Badge variant={portfolioData.filter(item => item.p_miss_cleaning > 0.8).length > 50 ? 'destructive' : portfolioData.filter(item => item.p_miss_cleaning > 0.8).length > 20 ? 'secondary' : 'default'}>
                       {portfolioData.filter(item => item.p_miss_cleaning > 0.8).length > 50 ? 'High' : 
                        portfolioData.filter(item => item.p_miss_cleaning > 0.8).length > 20 ? 'Medium' : 'Low'}
                     </Badge>
                   </div>
-                  <div className="flex justify-between items-center">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                     <span className="text-sm font-medium">Outlets Monitored</span>
                     <Badge variant="outline">
                       {portfolioData.length.toLocaleString()} / {(kpiData as any).total_outlets?.toLocaleString() || portfolioData.length.toLocaleString()}
                     </Badge>
                   </div>
-                  <div className="flex justify-between items-center">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                     <span className="text-sm font-medium">Environmental Impact</span>
                     <Badge variant="default" className="bg-green-600">
                       {(kpiData.co2_saved_kg / 1000).toFixed(1)} tons CO₂ saved
@@ -496,7 +496,7 @@ export default function DashboardPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <div className="flex items-center justify-between p-3 bg-red-50 border border-red-200 rounded-lg">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 bg-red-50 border border-red-200 rounded-lg gap-2">
                     <div className="flex items-center gap-2">
                       <AlertTriangle className="h-4 w-4 text-red-600" />
                       <span className="text-sm font-medium">High Priority Inspections</span>
@@ -505,7 +505,7 @@ export default function DashboardPage() {
                       {portfolioData.filter(item => item.p_miss_cleaning > 0.7).length}
                     </Badge>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 bg-yellow-50 border border-yellow-200 rounded-lg gap-2">
                     <div className="flex items-center gap-2">
                       <Clock className="h-4 w-4 text-yellow-600" />
                       <span className="text-sm font-medium">Due This Week</span>
@@ -523,7 +523,7 @@ export default function DashboardPage() {
                       }
                     </Badge>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 bg-blue-50 border border-blue-200 rounded-lg gap-2">
                     <div className="flex items-center gap-2">
                       <MapPin className="h-4 w-4 text-blue-600" />
                       <span className="text-sm font-medium">Route Optimization</span>
@@ -537,7 +537,7 @@ export default function DashboardPage() {
             </div>
           </TabsContent>
 
-          <TabsContent value="trends" className="space-y-6">
+          <TabsContent value="trends" className="space-y-4 sm:space-y-6">
             <Card>
               <CardHeader>
                 <CardTitle>Weekly Trends (2023)</CardTitle>
@@ -555,8 +555,8 @@ export default function DashboardPage() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="risks" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <TabsContent value="risks" className="space-y-4 sm:space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               <Card>
                 <CardHeader>
                   <CardTitle>High Risk Outlets</CardTitle>
@@ -569,7 +569,7 @@ export default function DashboardPage() {
                     {portfolioData
                       .sort((a, b) => b.p_miss_cleaning - a.p_miss_cleaning)
                       .slice(0, 8).map((outlet, index) => (
-                      <div key={outlet.outlet_id} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                      <div key={outlet.outlet_id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 bg-muted/30 rounded-lg gap-2">
                         <div className="flex items-center gap-3">
                           <div className={`w-2 h-2 rounded-full ${
                             outlet.p_miss_cleaning > 0.7 ? 'bg-red-500' : 
@@ -580,7 +580,7 @@ export default function DashboardPage() {
                             <p className="text-xs text-muted-foreground">{outlet.area} • {outlet.category}</p>
                           </div>
                         </div>
-                        <div className="text-right">
+                        <div className="text-left sm:text-right">
                           <p className={`text-sm font-bold ${
                             outlet.p_miss_cleaning > 0.7 ? 'text-red-600' : 
                             outlet.p_miss_cleaning > 0.4 ? 'text-yellow-600' : 'text-green-600'
@@ -612,7 +612,7 @@ export default function DashboardPage() {
                       
                       return (
                         <div key={grade} className="space-y-2">
-                          <div className="flex justify-between items-center">
+                          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                             <span className="text-sm font-medium">Grade {grade}</span>
                             <div className="flex items-center gap-2">
                               <span className="text-xs text-muted-foreground">{count} outlets</span>
@@ -642,8 +642,8 @@ export default function DashboardPage() {
             </div>
           </TabsContent>
 
-          <TabsContent value="geographic" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <TabsContent value="geographic" className="space-y-4 sm:space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               <Card>
                 <CardHeader>
                   <CardTitle>Grade Distribution by Area</CardTitle>
@@ -663,7 +663,7 @@ export default function DashboardPage() {
                       
                       return (
                         <div key={area} className="space-y-2">
-                          <div className="flex justify-between items-center">
+                          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                             <span className="text-sm font-medium">{area}</span>
                             <span className="text-xs text-muted-foreground">{areaOutlets.length} outlets</span>
                           </div>
@@ -681,7 +681,7 @@ export default function DashboardPage() {
                               />
                             ))}
                           </div>
-                          <div className="flex justify-between text-xs text-muted-foreground">
+                          <div className="flex flex-wrap justify-between text-xs text-muted-foreground gap-2">
                             {gradeDistribution.map(({ grade, count }) => (
                               <span key={grade} className="flex items-center gap-1">
                                 <div className={`w-2 h-2 rounded-full ${
