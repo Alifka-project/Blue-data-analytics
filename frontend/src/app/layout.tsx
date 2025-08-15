@@ -65,11 +65,11 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/favicon.svg", type: "image/svg+xml" }
+      { url: "/favicon.ico?v=2", sizes: "any" },
+      { url: "/favicon.svg?v=2", type: "image/svg+xml" }
     ],
-    apple: "/logo.svg",
-    shortcut: "/favicon.ico"
+    apple: "/logo.svg?v=2",
+    shortcut: "/favicon.ico?v=2"
   },
   manifest: "/manifest.webmanifest",
 };
@@ -89,6 +89,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${montserrat.variable}`}>
+      <head>
+        <link rel="icon" href="/favicon.ico?v=2" sizes="any" />
+        <link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/logo.svg?v=2" />
+        <link rel="shortcut icon" href="/favicon.ico?v=2" />
+      </head>
       <body className={`${inter.className} antialiased`}>
         {children}
       </body>
