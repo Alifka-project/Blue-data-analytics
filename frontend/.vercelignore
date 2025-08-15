@@ -1,0 +1,26 @@
+# Exclude backend and other non-frontend files
+../backend/
+../data/
+../docs/
+../scripts/
+../snapshots/
+../models/
+../venv/
+../logs/
+../.git/
+../.DS_Store
+../Makefile
+../pyproject.toml
+../start-dashboard.sh
+../dev.log
+
+# Exclude development files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Exclude build artifacts
+.next/
+node_modules/
+*.log
